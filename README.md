@@ -16,7 +16,7 @@ go install github.com/go-kratos/kratos/cmd/kratos/v2@latest
 ```
     - 创建proto文件: kratos proto add [proto file path]
     - 生成proto-go代码: kratos proto client [proto file path]
-    - 生成proto-service代码: kratos proto service 
+    - 生成proto-service代码: kratos proto service [proto file path] -t [dest server file]
     - 完善 data/biz/service/server 的代码逻辑，并配置各模块的ProviderSet
     - wire注入: make Makefile generate
 ```
