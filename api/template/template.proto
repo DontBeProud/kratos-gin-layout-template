@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package api.template;
+
+import "google/api/annotations.proto";
+
+option go_package = "layout_template/api/template;template";
+option java_multiple_files = true;
+option java_package = "api.template";
+
+service Template {
+	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply){
+		option (google.api.http) = {
+			post: "/template/create"
+			body: "*"
+		};
+	};
+	rpc GetTemplate (GetTemplateRequest) returns (GetTemplateReply){
+		option (google.api.http) = {
+			get: "/template/get/{name}"
+		};
+	};
+}
+
+message CreateTemplateRequest {
+	string name = 1;
+}
+message CreateTemplateReply {
+	string message = 1;
+}
+
+message GetTemplateRequest {
+	string name = 1;
+}
+message GetTemplateReply {
+	string message = 1;
+}
