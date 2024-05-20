@@ -1,8 +1,9 @@
 package http_server
 
 import (
-	"layout_template/api/template"
+	"github.com/gin-gonic/gin"
 	"layout_template/internal/conf"
+	"layout_template/internal/server/template_server/http_server/gin_router/template_router"
 	"layout_template/internal/service/template_service"
 
 	"github.com/go-kratos/kratos/v2/log"
@@ -30,17 +31,17 @@ func NewHTTPServer(c *conf.Server, svc *template_service.TemplateService, logger
 
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
-	// 使用grpc原生生成的路由配置，则使用对应的原生register函数
-	template.RegisterTemplateHTTPServer(srv, svc)
+	// // 使用grpc原生生成的路由配置，则使用对应的原生register函数
+	//template.RegisterTemplateHTTPServer(srv, svc)
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
 
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
-	//// // 集成gin，可参照下列代码
-	//g := gin.Default()
-	//template_router.RegisterTemplateRouter(g, svc)
-	//srv.HandlePrefix("/", g)
+	// // 集成gin，可参照下列代码
+	g := gin.Default()
+	template_router.RegisterTemplateRouter(g, svc)
+	srv.HandlePrefix("/", g)
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
 
