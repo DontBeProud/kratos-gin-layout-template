@@ -4,16 +4,15 @@ import (
 	"context"
 	"github.com/go-kratos/kratos/v2/log"
 	"layout_template/internal/biz/template_biz"
-	"layout_template/internal/data/base"
 )
 
 type templateRepo struct {
-	data *base.Data
+	data *Data
 	log  *log.Helper
 }
 
 // NewTemplateRepo .
-func NewTemplateRepo(data *base.Data, logger log.Logger) template_biz.TemplateRepo {
+func NewTemplateRepo(data *Data, logger log.Logger) template_biz.TemplateRepo {
 	return &templateRepo{
 		data: data,
 		log:  log.NewHelper(logger),

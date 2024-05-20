@@ -11,10 +11,9 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"layout_template/internal/biz/template_biz"
 	"layout_template/internal/conf"
-	"layout_template/internal/data/base"
 	"layout_template/internal/data/template_data"
-	"layout_template/internal/server/grpc_server"
-	"layout_template/internal/server/http_server"
+	"layout_template/internal/server/template_server/grpc_server"
+	"layout_template/internal/server/template_server/http_server"
 	"layout_template/internal/service/template_service"
 )
 
@@ -26,7 +25,7 @@ import (
 
 // wireApp init kratos application.
 func wireApp(server *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	baseData, cleanup, err := base.NewData(data, logger)
+	baseData, cleanup, err := template_data.NewData(data, logger)
 	if err != nil {
 		return nil, nil, err
 	}
