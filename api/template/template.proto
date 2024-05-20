@@ -11,27 +11,32 @@ option java_package = "api.template";
 service Template {
 	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply){
 		option (google.api.http) = {
-			post: "/template/create"
-			body: "*"
+			post: "/template/{sid}/create"
+			body: "realName"
 		};
 	};
-	rpc GetTemplate (GetTemplateRequest) returns (GetTemplateReply){
+	rpc QueryTemplate (QueryTemplateRequest) returns (QueryTemplateReply){
 		option (google.api.http) = {
-			get: "/template/get/{name}"
+			get: "/template/{sid}/query"
 		};
 	};
 }
 
-message CreateTemplateRequest {
+message CreateTemplateRequestBody {
 	string name = 1;
+}
+message CreateTemplateRequest {
+	string sid = 1;
+	CreateTemplateRequestBody realName = 2;
 }
 message CreateTemplateReply {
 	string message = 1;
 }
 
-message GetTemplateRequest {
-	string name = 1;
+message QueryTemplateRequest {
+	string sid = 1;
+	string name = 2;
 }
-message GetTemplateReply {
+message QueryTemplateReply {
 	string message = 1;
 }

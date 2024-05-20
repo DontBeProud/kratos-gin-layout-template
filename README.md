@@ -1,5 +1,9 @@
 # Kratos Project Template
 
+## notice
+- 定义涉及http服务的proto时, 参照google的规范文档: [pb-http规范文档](https://cloud.google.com/apis/design/standard_methods?hl=zh-cn)
+
+
 ## Install Kratos
 ```
 go install github.com/go-kratos/kratos/cmd/kratos/v2@latest

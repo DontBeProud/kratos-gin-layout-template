@@ -27,6 +27,22 @@ func NewHTTPServer(c *conf.Server, svc *template_service.TemplateService, logger
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
+
+	// ---------------------------------------------------------
+	// ---------------------------------------------------------
+	// 使用grpc原生生成的路由配置，则使用对应的原生register函数
 	template.RegisterTemplateHTTPServer(srv, svc)
+	// ---------------------------------------------------------
+	// ---------------------------------------------------------
+
+	// ---------------------------------------------------------
+	// ---------------------------------------------------------
+	//// // 集成gin，可参照下列代码
+	//g := gin.Default()
+	//template_router.RegisterTemplateRouter(g, svc)
+	//srv.HandlePrefix("/", g)
+	// ---------------------------------------------------------
+	// ---------------------------------------------------------
+
 	return srv
 }

@@ -2,6 +2,7 @@ package template_service
 
 import (
 	"context"
+	"fmt"
 	"layout_template/api/template"
 	"layout_template/internal/biz/template_biz"
 )
@@ -17,18 +18,18 @@ func NewTemplateService(uc *template_biz.TemplateUseCase) *TemplateService {
 	return &TemplateService{uc: uc}
 }
 
-func (s *TemplateService) GetTemplate(ctx context.Context, in *template.GetTemplateRequest) (*template.GetTemplateReply, error) {
-	g, err := s.uc.GetTemplate(ctx, &template_biz.Template{Hello: in.Name})
+func (s *TemplateService) QueryTemplate(ctx context.Context, in *template.QueryTemplateRequest) (*template.QueryTemplateReply, error) {
+	g, err := s.uc.QueryTemplate(ctx, &template_biz.Template{Hello: in.Name, Sid: in.Sid})
 	if err != nil {
 		return nil, err
 	}
-	return &template.GetTemplateReply{Message: "Hello " + g.Hello}, nil
+	return &template.QueryTemplateReply{Message: fmt.Sprintf("Hello %s; your service id is %s", g.Hello, g.Sid)}, nil
 }
 
 func (s *TemplateService) CreateTemplate(ctx context.Context, in *template.CreateTemplateRequest) (*template.CreateTemplateReply, error) {
-	g, err := s.uc.CreateTemplate(ctx, &template_biz.Template{Hello: in.Name})
+	g, err := s.uc.CreateTemplate(ctx, &template_biz.Template{Hello: in.RealName.Name, Sid: in.Sid})
 	if err != nil {
 		return nil, err
 	}
-	return &template.CreateTemplateReply{Message: "Hello " + g.Hello}, nil
+	return &template.CreateTemplateReply{Message: fmt.Sprintf("Hello %s; your service id is %s", g.Hello, g.Sid)}, nil
 }

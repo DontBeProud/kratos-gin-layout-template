@@ -8,11 +8,12 @@ import (
 
 type Template struct {
 	Hello string
+	Sid   string
 }
 
 type TemplateRepo interface {
 	CreateTemplate(context.Context, *Template) (*Template, error)
-	GetTemplate(context.Context, *Template) (*Template, error)
+	QueryTemplate(context.Context, *Template) (*Template, error)
 }
 
 type TemplateUseCase struct {
@@ -29,7 +30,7 @@ func (uc *TemplateUseCase) CreateTemplate(ctx context.Context, g *Template) (*Te
 	return uc.repo.CreateTemplate(ctx, g)
 }
 
-func (uc *TemplateUseCase) GetTemplate(ctx context.Context, g *Template) (*Template, error) {
-	uc.log.WithContext(ctx).Infof("GetTemplate Template: %v", g.Hello)
-	return uc.repo.GetTemplate(ctx, g)
+func (uc *TemplateUseCase) QueryTemplate(ctx context.Context, g *Template) (*Template, error) {
+	uc.log.WithContext(ctx).Infof("QueryTemplate Template: %v", g.Hello)
+	return uc.repo.QueryTemplate(ctx, g)
 }

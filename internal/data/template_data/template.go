@@ -24,6 +24,6 @@ func (r *templateRepo) CreateTemplate(ctx context.Context, g *template_biz.Templ
 	return g, nil
 }
 
-func (r *templateRepo) GetTemplate(ctx context.Context, g *template_biz.Template) (*template_biz.Template, error) {
+func (r *templateRepo) QueryTemplate(ctx context.Context, g *template_biz.Template) (*template_biz.Template, error) {
 	return g, nil
 }
