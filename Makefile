@@ -1,8 +1,8 @@
-GOHOSTOS:=$(shell go env GOHOSTOS)
+HOST_OS:=$(shell go env GOHOSTOS)
 GOPATH:=$(shell go env GOPATH)
-VERSION=$(shell git describe --tags --always)
+GIT_VERSION=$(shell git describe --tags --always)
 
-ifeq ($(GOHOSTOS), windows)
+ifeq ($(HOST_OS), windows)
 	#the `find.exe` is different from `find` in bash/shell.
 	#to see https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/find.
 	#changed to use git-bash.exe to run find cli or other cli friendly, caused of every developer has a Git.
@@ -49,11 +49,11 @@ api:
 .PHONY: build
 # build
 build:
-ifeq ($(GOHOSTOS), windows)
+ifeq ($(HOST_OS), windows)
 	if not exist bin mkdir bin;
-	go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
+	go build -ldflags "-X main.GitVersion=$(GIT_VERSION)" -o ./bin/ ./...
 else
-	mkdir -p bin/ && go build -ldflags "-X main.Version=$(VERSION)" -o ./bin/ ./...
+	mkdir -p bin/ && go build -ldflags "-X main.GitVersion=$(GIT_VERSION)" -o ./bin/ ./...
 endif
 
 .PHONY: generate

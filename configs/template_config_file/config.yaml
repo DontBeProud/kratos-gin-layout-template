@@ -1,11 +1,11 @@
-server:
+serverCfg:
   http:
     addr: 0.0.0.0:8000
     timeout: 1s
   grpc:
     addr: 0.0.0.0:9000
     timeout: 1s
-data:
+dataSourceCfg:
   database:
     driver: mysql
     source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
@@ -13,3 +13,10 @@ data:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
     write_timeout: 0.2s
+loggerCfg:
+  systemLoggerCfg:
+    rootDir: ../logs
+    logLevel: DebugLevel
+  mysqlTracingCfg:
+    tracingLevel: Info
+    SlowThreshold: 1000s

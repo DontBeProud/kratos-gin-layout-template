@@ -1,16 +1,23 @@
 syntax = "proto3";
 package kratos.api;
 
-option go_package = "layout_template/internal/conf;conf";
+option go_package = "layout_template/internal/conf/template_config;template_config";
 
 import "google/protobuf/duration.proto";
+import "standard_logger_pb/standard_logger_pb.proto";
 
-message Bootstrap {
-  Server server = 1;
-  Data data = 2;
+message Config {
+  LoggerConfig loggerCfg = 1;
+  ServerConfig serverCfg = 2;
+  DataSourceCfg dataSourceCfg = 3;
 }
 
-message Server {
+message LoggerConfig {
+  standard_logger_pb.LoggerConfig systemLoggerCfg = 1;
+  standard_logger_pb.GormTracingConfig mysqlTracingCfg = 2;
+}
+
+message ServerConfig {
   message HTTP {
     string network = 1;
     string addr = 2;
@@ -25,7 +32,7 @@ message Server {
   GRPC grpc = 2;
 }
 
-message Data {
+message DataSourceCfg {
   message Database {
     string driver = 1;
     string source = 2;

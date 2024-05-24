@@ -1,19 +1,26 @@
 package template_data
 
 import (
-	"github.com/go-kratos/kratos/v2/log"
-	"layout_template/internal/conf"
+	"go.uber.org/zap"
+	"layout_template/internal/conf/template_config"
 )
 
 // Data .
 type Data struct {
-	// TODO wrapped database client
+	logger *zap.Logger
 }
 
 // NewData .
-func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
+func NewData(c *template_config.DataSourceCfg, loggerCfg *template_config.LoggerConfig) (*Data, func(), error) {
+	_logger, err := template_config.NewStandardSystemLogger(loggerCfg, "svc", nil, nil, nil)
 	cleanup := func() {
-		log.NewHelper(logger).Info("closing the data resources")
+		if _logger != nil {
+			_logger.Info("closing the data resources")
+		}
 	}
+	if err != nil {
+		return nil, cleanup, err
+	}
+
 	return &Data{}, cleanup, nil
 }

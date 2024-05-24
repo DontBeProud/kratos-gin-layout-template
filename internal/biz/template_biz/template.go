@@ -2,8 +2,9 @@ package template_biz
 
 import (
 	"context"
-
-	"github.com/go-kratos/kratos/v2/log"
+	"fmt"
+	"go.uber.org/zap"
+	"layout_template/internal/conf/template_config"
 )
 
 type Template struct {
@@ -17,20 +18,24 @@ type TemplateRepo interface {
 }
 
 type TemplateUseCase struct {
-	repo TemplateRepo
-	log  *log.Helper
+	repo   TemplateRepo
+	logger *zap.Logger
 }
 
-func NewTemplateUseCase(repo TemplateRepo, logger log.Logger) *TemplateUseCase {
-	return &TemplateUseCase{repo: repo, log: log.NewHelper(logger)}
+func NewTemplateUseCase(repo TemplateRepo, loggerCfg *template_config.LoggerConfig) (*TemplateUseCase, error) {
+	_logger, err := template_config.NewStandardSystemLogger(loggerCfg, "biz", nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &TemplateUseCase{repo: repo, logger: _logger}, nil
 }
 
 func (uc *TemplateUseCase) CreateTemplate(ctx context.Context, g *Template) (*Template, error) {
-	uc.log.WithContext(ctx).Infof("CreateTemplate Template: %v", g.Hello)
+	uc.logger.Info(fmt.Sprintf("CreateTemplate Template: %v", g.Hello))
 	return uc.repo.CreateTemplate(ctx, g)
 }
 
 func (uc *TemplateUseCase) QueryTemplate(ctx context.Context, g *Template) (*Template, error) {
-	uc.log.WithContext(ctx).Infof("QueryTemplate Template: %v", g.Hello)
+	uc.logger.Info(fmt.Sprintf("QueryTemplate Template: %v", g.Hello))
 	return uc.repo.QueryTemplate(ctx, g)
 }

@@ -1,21 +1,25 @@
 package http_server
 
 import (
-	"github.com/gin-gonic/gin"
-	"layout_template/internal/conf"
-	"layout_template/internal/server/template_server/http_server/gin_router/template_router"
+	"github.com/go-kratos/kratos/v2/middleware/logging"
+	"layout_template/api/template"
+	"layout_template/internal/conf/template_config"
 	"layout_template/internal/service/template_service"
 
-	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, svc *template_service.TemplateService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *template_config.ServerConfig, svc *template_service.TemplateService, loggerCfg *template_config.LoggerConfig) (*http.Server, error) {
+	_logger, err := template_config.NewKratosLogger(loggerCfg, "http", nil, nil, nil)
+	if err != nil {
+		return nil, err
+	}
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			logging.Server(_logger),
 		),
 	}
 	if c.Http.Network != "" {
@@ -31,19 +35,19 @@ func NewHTTPServer(c *conf.Server, svc *template_service.TemplateService, logger
 
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
-	// // 使用grpc原生生成的路由配置，则使用对应的原生register函数
-	//template.RegisterTemplateHTTPServer(srv, svc)
+	// 使用grpc原生生成的路由配置，则使用对应的原生register函数
+	template.RegisterTemplateHTTPServer(srv, svc)
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
 
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
-	// // 集成gin，可参照下列代码
-	g := gin.Default()
-	template_router.RegisterTemplateRouter(g, svc)
-	srv.HandlePrefix("/", g)
+	//// // 集成gin，可参照下列代码
+	//g := gin.Default()
+	//template_router.RegisterTemplateRouter(g, svc)
+	//srv.HandlePrefix("/", g)
 	// ---------------------------------------------------------
 	// ---------------------------------------------------------
 
-	return srv
+	return srv, nil
 }

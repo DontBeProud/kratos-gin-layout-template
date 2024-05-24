@@ -8,9 +8,8 @@ package main
 
 import (
 	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
 	"layout_template/internal/biz/template_biz"
-	"layout_template/internal/conf"
+	"layout_template/internal/conf/template_config"
 	"layout_template/internal/data/template_data"
 	"layout_template/internal/server/template_server/grpc_server"
 	"layout_template/internal/server/template_server/http_server"
@@ -24,17 +23,37 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(server *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	baseData, cleanup, err := template_data.NewData(data, logger)
+func wireApp(serverConfig *template_config.ServerConfig, dataSourceCfg *template_config.DataSourceCfg, loggerConfig *template_config.LoggerConfig) (*kratos.App, func(), error) {
+	data, cleanup, err := template_data.NewData(dataSourceCfg, loggerConfig)
 	if err != nil {
 		return nil, nil, err
 	}
-	templateRepo := template_data.NewTemplateRepo(baseData, logger)
-	templateUseCase := template_biz.NewTemplateUseCase(templateRepo, logger)
-	templateService := template_service.NewTemplateService(templateUseCase)
-	grpcServer := grpc_server.NewGRPCServer(server, templateService, logger)
-	httpServer := http_server.NewHTTPServer(server, templateService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	templateRepo := template_data.NewTemplateRepo(data)
+	templateUseCase, err := template_biz.NewTemplateUseCase(templateRepo, loggerConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	templateService, err := template_service.NewTemplateService(templateUseCase, loggerConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	server, err := grpc_server.NewGRPCServer(serverConfig, templateService, loggerConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	httpServer, err := http_server.NewHTTPServer(serverConfig, templateService, loggerConfig)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	app, err := newApp(loggerConfig, server, httpServer)
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
 	return app, func() {
 		cleanup()
 	}, nil
