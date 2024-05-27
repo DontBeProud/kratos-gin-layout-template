@@ -1,7 +1,7 @@
 filippo.io/edwards25519 v1.1.0 h1:FNf4tywRC1HmFuKW5xopWpigGjJKiJSV0Cqo0cJWDaA=
 filippo.io/edwards25519 v1.1.0/go.mod h1:BxyFTGdWcka3PhytdK4V28tE5sGfRvvvRV7EaN4VDT4=
-github.com/DontBeProud/go-kits v0.0.0-20240524055041-3212bafa59a1 h1:jfrf0d0fIFfO4K0O5GIjWPZ5gLQaKLSp97Rp6g97cZ0=
-github.com/DontBeProud/go-kits v0.0.0-20240524055041-3212bafa59a1/go.mod h1:+/AYGNxev/0JoD18lRozSIgYOKm/e49WBbJtfGL99aU=
+github.com/DontBeProud/go-kits v0.0.0-20240527061742-187ab3f90d0e h1:hLrkZYpwnZXkpHk8Fp+XWeixbKHzVJPFYeLexW8vOFw=
+github.com/DontBeProud/go-kits v0.0.0-20240527061742-187ab3f90d0e/go.mod h1:+/AYGNxev/0JoD18lRozSIgYOKm/e49WBbJtfGL99aU=
 github.com/bytedance/sonic v1.11.6 h1:oUp34TzMlL+OY1OUWxHqsdkgC/Zfc85zGqw9siXjrc0=
 github.com/bytedance/sonic v1.11.6/go.mod h1:LysEHSvpvDySVdC2f87zGWf6CIKJcAvqab1ZaiQtds4=
 github.com/bytedance/sonic/loader v0.1.1 h1:c+e5Pt1k/cy5wMveRDyk2X4B9hF4g7an8N3zCYjJFNM=

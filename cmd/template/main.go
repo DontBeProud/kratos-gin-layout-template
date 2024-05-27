@@ -1,15 +1,11 @@
 package main
 
 import (
-	"flag"
-	"layout_template/internal/conf/template_config"
-	"os"
-
 	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/config"
-	"github.com/go-kratos/kratos/v2/config/file"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"layout_template/internal/conf/template_config"
+	"os"
 
 	_ "go.uber.org/automaxprocs"
 )
@@ -24,6 +20,8 @@ var (
 	flagConf string
 
 	id, _ = os.Hostname()
+
+	Version = GitVersion + version
 )
 
 const (
@@ -32,8 +30,8 @@ const (
 	cfgFlagUsage       = "config path, eg: -conf config.yaml"
 )
 
-func init() {
-	flag.StringVar(&flagConf, "conf", defaultCfgFilePath, cfgFlagUsage)
+func main() {
+	run()
 }
 
 func newApp(loggerCfg *template_config.LoggerConfig, gs *grpc.Server, hs *http.Server) (*kratos.App, error) {
@@ -44,7 +42,7 @@ func newApp(loggerCfg *template_config.LoggerConfig, gs *grpc.Server, hs *http.S
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
-		kratos.Version(GitVersion+version),
+		kratos.Version(Version),
 		kratos.Metadata(map[string]string{}),
 		kratos.Logger(_logger),
 		kratos.Server(
@@ -52,39 +50,4 @@ func newApp(loggerCfg *template_config.LoggerConfig, gs *grpc.Server, hs *http.S
 			hs,
 		),
 	), nil
-}
-
-func main() {
-	flag.Parse()
-
-	cfgSource := config.New(
-		config.WithSource(
-			file.NewSource(flagConf),
-		),
-	)
-	defer func() { _ = cfgSource.Close() }()
-
-	if err := cfgSource.Load(); err != nil {
-		panic(err)
-	}
-
-	var cfg template_config.Config
-	if err := cfgSource.Scan(&cfg); err != nil {
-		panic(err)
-	}
-
-	if cfg.LoggerCfg == nil {
-		panic("cfg.LoggerCfg == nil")
-	}
-
-	app, cleanup, err := wireApp(cfg.ServerCfg, cfg.DataSourceCfg, cfg.LoggerCfg)
-	if err != nil {
-		panic(err)
-	}
-	defer cleanup()
-
-	// start and wait for stop signal
-	if err = app.Run(); err != nil {
-		panic(err)
-	}
 }
