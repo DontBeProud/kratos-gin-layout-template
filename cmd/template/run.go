@@ -44,7 +44,7 @@ func run() {
 
 	// 开启进程状态监控
 	ctx := context.Background()
-	go func() { mainLogger.ExecuteMonitorTask(ctx, time.Second, nil) }()
+	go func() { mainLogger.ExecuteMonitorTask(ctx, time.Minute, nil) }()
 
 	// init app
 	app, cleanup, err := wireApp(cfg.ServerCfg, cfg.DataSourceCfg, cfg.LoggerCfg)
