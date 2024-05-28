@@ -3,7 +3,7 @@ module layout_template
 go 1.19
 
 require (
-	github.com/DontBeProud/go-kits v0.0.0-20240527061742-187ab3f90d0e
+	github.com/DontBeProud/go-kits v0.0.0-20240528061737-5b9930adc57e
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-kratos/kratos/v2 v2.7.2
 	github.com/google/wire v0.6.0

@@ -44,7 +44,7 @@ func run() {
 
 	// 开启进程状态监控
 	ctx := context.Background()
-	go func() { mainLogger.ExecuteGlobalMonitorTask(ctx, time.Minute, nil) }()
+	go func() { mainLogger.ExecuteMonitorTask(ctx, time.Second, nil) }()
 
 	// init app
 	app, cleanup, err := wireApp(cfg.ServerCfg, cfg.DataSourceCfg, cfg.LoggerCfg)
@@ -59,7 +59,7 @@ func run() {
 	}
 }
 
-func newMonitorLogger(cfg *template_config.Config, serviceName string) (standard_logger.GlobalMonitorLogger, error) {
+func newMonitorLogger(cfg *template_config.Config, serviceName string) (standard_logger.MonitorLogger, error) {
 	sysCfg, err := template_config.GetSystemConfig(cfg.LoggerCfg)
 	if err != nil {
 		return nil, err
