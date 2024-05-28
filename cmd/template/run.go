@@ -40,6 +40,7 @@ func run() {
 		}
 	}()
 	mainLogger.GetLogger().Info(fmt.Sprintf("Process Run: %s", Version))
+	mainLogger.GetLogger().Info(fmt.Sprintf("Load Config: %s", cfg.String()))
 
 	// 开启进程状态监控
 	ctx := context.Background()
