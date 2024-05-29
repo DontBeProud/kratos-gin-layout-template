@@ -9,19 +9,19 @@ import "validate/validate.proto";
 message StandardAccount {
   string accountUId = 1[(validate.rules).string = {max_len: 128}];    // 账号唯一id
   string accountName = 2[(validate.rules).string = {max_len: 128}];   // 账号名
-  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化信息可以kv的形式存于该字段
+  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化的账号信息可以kv的形式存于该字段
 }
 
 // 标准角色信息
 message StandardRole{
   string roleUid = 1[(validate.rules).string = {max_len: 128}];       // 角色唯一id
   string roleNickName = 2[(validate.rules).string = {max_len: 128}];  // 角色当前昵称
-  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化信息可以kv的形式存于该字段
+  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化的角色信息可以kv的形式存于该字段
 }
 
 // 标准区服信息
 message StandardServer{
   string serverId = 1[(validate.rules).string = {max_len: 128}];      // 区服id
   string serverName = 2[(validate.rules).string = {max_len: 128}];    // 区服名
-  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化信息可以kv的形式存于该字段
+  map<string, string> additionalInfo = 3;                             // 附加信息, 非标准化的区服信息可以kv的形式存于该字段
 }
