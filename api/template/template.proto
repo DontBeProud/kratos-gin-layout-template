@@ -2,7 +2,10 @@ syntax = "proto3";
 
 package api.template;
 
+import "validate/validate.proto";
 import "google/api/annotations.proto";
+import "common/common_pb/game.proto";
+import "common/common_pb/server.proto";
 
 option go_package = "layout_template/api/template;template";
 option java_multiple_files = true;
@@ -11,32 +14,37 @@ option java_package = "api.template";
 service Template {
 	rpc CreateTemplate (CreateTemplateRequest) returns (CreateTemplateReply){
 		option (google.api.http) = {
-			post: "/template/{sid}/create"
-			body: "realName"
+			post: "/template/{base.gameId}/create"
+			body: "body"
 		};
 	};
 	rpc QueryTemplate (QueryTemplateRequest) returns (QueryTemplateReply){
 		option (google.api.http) = {
-			get: "/template/{sid}/query"
+			get: "/template/{base.gameId}/query"
 		};
 	};
 }
 
-message CreateTemplateRequestBody {
-	string name = 1;
+message CreateTemplateRequestBody{
+	common_pb.StandardAccount account = 1;
+	string action = 2;
 }
+
 message CreateTemplateRequest {
-	string sid = 1;
-	CreateTemplateRequestBody realName = 2;
+	common_pb.StandardRequestBase base = 1[(validate.rules).message.required = true];
+	CreateTemplateRequestBody body = 2;
 }
 message CreateTemplateReply {
-	string message = 1;
+	common_pb.StandardReplyBase base = 1;
+	string message = 2;
 }
 
 message QueryTemplateRequest {
-	string sid = 1;
-	string name = 2;
+	common_pb.StandardRequestBase base = 1[(validate.rules).message.required = true];
+	common_pb.StandardAccount account = 2;
+	string action = 3;
 }
 message QueryTemplateReply {
-	string message = 1;
+	common_pb.StandardReplyBase base = 1;
+	string message = 2;
 }

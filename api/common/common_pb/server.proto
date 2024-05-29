@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package common_pb;
+option go_package = "layout_template/api/common/common_pb;common_pb";
+
+// 标准请求基础信息
+message StandardRequestBase {
+  uint32 gameId = 1;  // 游戏id
+}
+
+// 标准回复基础信息
+message StandardReplyBase {
+  int32 code = 1;     // 返回码
+  string err = 2;     // 错误信息
+}

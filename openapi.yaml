@@ -3,8 +3,116 @@
 
 openapi: 3.0.3
 info:
-    title: ""
+    title: Template API
     version: 0.0.1
-paths: {}
+paths:
+    /template/{base.gameId}/create:
+        post:
+            tags:
+                - Template
+            operationId: Template_CreateTemplate
+            parameters:
+                - name: base.gameId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: base.gameId
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/api.template.CreateTemplateRequestBody'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.template.CreateTemplateReply'
+    /template/{base.gameId}/query:
+        get:
+            tags:
+                - Template
+            operationId: Template_QueryTemplate
+            parameters:
+                - name: base.gameId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: base.gameId
+                  in: query
+                  schema:
+                    type: integer
+                    format: uint32
+                - name: account.accountUId
+                  in: query
+                  schema:
+                    type: string
+                - name: account.accountName
+                  in: query
+                  schema:
+                    type: string
+                - name: action
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/api.template.QueryTemplateReply'
 components:
-    schemas: {}
+    schemas:
+        api.template.CreateTemplateReply:
+            type: object
+            properties:
+                base:
+                    $ref: '#/components/schemas/common_pb.StandardReplyBase'
+                message:
+                    type: string
+        api.template.CreateTemplateRequestBody:
+            type: object
+            properties:
+                account:
+                    $ref: '#/components/schemas/common_pb.StandardAccount'
+                action:
+                    type: string
+        api.template.QueryTemplateReply:
+            type: object
+            properties:
+                base:
+                    $ref: '#/components/schemas/common_pb.StandardReplyBase'
+                message:
+                    type: string
+        common_pb.StandardAccount:
+            type: object
+            properties:
+                accountUId:
+                    type: string
+                accountName:
+                    type: string
+                additionalInfo:
+                    type: object
+                    additionalProperties:
+                        type: string
+            description: 标准账号信息
+        common_pb.StandardReplyBase:
+            type: object
+            properties:
+                code:
+                    type: integer
+                    format: int32
+                err:
+                    type: string
+            description: 标准回复基础信息
+tags:
+    - name: Template

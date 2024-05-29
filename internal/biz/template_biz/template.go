@@ -8,8 +8,10 @@ import (
 )
 
 type Template struct {
-	Hello string
-	Sid   string
+	GameId      uint32
+	AccountUid  string
+	AccountName string
+	Action      string
 }
 
 type TemplateRepo interface {
@@ -31,11 +33,11 @@ func NewTemplateUseCase(repo TemplateRepo, loggerCfg *template_config.LoggerConf
 }
 
 func (uc *TemplateUseCase) CreateTemplate(ctx context.Context, g *Template) (*Template, error) {
-	uc.logger.Info(fmt.Sprintf("CreateTemplate Template: %v", g.Hello))
+	uc.logger.Info(fmt.Sprintf("CreateTemplate Template: game-id: %d, account: %s(%s), action: %s", g.GameId, g.AccountUid, g.AccountName, g.Action))
 	return uc.repo.CreateTemplate(ctx, g)
 }
 
 func (uc *TemplateUseCase) QueryTemplate(ctx context.Context, g *Template) (*Template, error) {
-	uc.logger.Info(fmt.Sprintf("QueryTemplate Template: %v", g.Hello))
+	uc.logger.Info(fmt.Sprintf("QueryTemplate Template: game-id: %d, account: %s(%s), action: %s", g.GameId, g.AccountUid, g.AccountName, g.Action))
 	return uc.repo.QueryTemplate(ctx, g)
 }

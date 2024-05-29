@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.uber.org/zap"
+	"layout_template/api/common/common_pb"
 	"layout_template/api/template"
 	"layout_template/internal/biz/template_biz"
 	"layout_template/internal/conf/template_config"
@@ -26,17 +27,48 @@ func NewTemplateService(uc *template_biz.TemplateUseCase, loggerCfg *template_co
 }
 
 func (s *TemplateService) QueryTemplate(ctx context.Context, in *template.QueryTemplateRequest) (*template.QueryTemplateReply, error) {
-	g, err := s.uc.QueryTemplate(ctx, &template_biz.Template{Hello: in.Name, Sid: in.Sid})
+	data := &template_biz.Template{
+		Action: in.Action,
+	}
+	if in.Base != nil {
+		data.GameId = in.Base.GameId
+	}
+	if in.Account != nil {
+		data.AccountUid = in.Account.AccountUId
+		data.AccountName = in.Account.AccountName
+	}
+	g, err := s.uc.QueryTemplate(ctx, data)
 	if err != nil {
 		return nil, err
 	}
-	return &template.QueryTemplateReply{Message: fmt.Sprintf("Hello %s; your service id is %s", g.Hello, g.Sid)}, nil
+	return &template.QueryTemplateReply{
+		Base: &common_pb.StandardReplyBase{
+			Code: 1,
+		},
+		Message: fmt.Sprintf("game-id: %d, account: %s(%s), action: %s", g.GameId, g.AccountUid, g.AccountName, g.Action),
+	}, nil
 }
 
 func (s *TemplateService) CreateTemplate(ctx context.Context, in *template.CreateTemplateRequest) (*template.CreateTemplateReply, error) {
-	g, err := s.uc.CreateTemplate(ctx, &template_biz.Template{Hello: in.RealName.Name, Sid: in.Sid})
+	data := &template_biz.Template{}
+	if in.Base != nil {
+		data.GameId = in.Base.GameId
+	}
+	if in.Body != nil {
+		data.Action = in.Body.Action
+		if in.Body.Account != nil {
+			data.AccountUid = in.Body.Account.AccountUId
+			data.AccountName = in.Body.Account.AccountName
+		}
+	}
+	g, err := s.uc.QueryTemplate(ctx, data)
 	if err != nil {
 		return nil, err
 	}
-	return &template.CreateTemplateReply{Message: fmt.Sprintf("Hello %s; your service id is %s", g.Hello, g.Sid)}, nil
+	return &template.CreateTemplateReply{
+		Base: &common_pb.StandardReplyBase{
+			Code: 1,
+		},
+		Message: fmt.Sprintf("game-id: %d, account: %s(%s), action: %s", g.GameId, g.AccountUid, g.AccountName, g.Action),
+	}, nil
 }
